@@ -16,3 +16,8 @@ class CursoModelTest(TestCase):
         for attr in attributes:
             with self.subTest():
                 self.assertTrue(hasattr(self.obj, attr))
+
+    def test_data_exists(self):
+        data = dict(nome='Princípios meteorologia', num_vagas=50)
+        CursoModel.objects.create(**data)
+        self.assertTrue(CursoModel.objects.exists())
