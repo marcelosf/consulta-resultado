@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'consulta.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-default_db_url = 'sqlite://' + os.path.join(BASE_DIR, 'db.sqlite3')
+default_db_url = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
 
 DATABASES = {
     'default': config('DATABASES', default=default_db_url, cast=db_url)
