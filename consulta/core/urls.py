@@ -6,5 +6,5 @@ app_name = 'core'
 
 
 urlpatterns = [
-    path('new', new, name='new')
+    path('', new, name='new')
 ]

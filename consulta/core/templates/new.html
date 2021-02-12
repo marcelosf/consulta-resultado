@@ -1,0 +1,28 @@
+{% extends 'main.html' %}
+
+
+{% block content %}
+
+<h1>Adicionar Curso</h1>
+
+{{ form.non_field_errors }}
+<form action="#" novalidate>
+    <div class="form-warapper">
+        {{ form.nome.errors }}
+        {{ form.nome.label_tag }}
+        {{ form.nome }}
+    </div>
+    <div class="form-wrapper">
+        {{ form.num_vagas.errors }}
+        {{ form.num_vagas.label_tag }}
+        {{ form.num_vagas }}
+    </div>
+    <div class="form-wrapper">
+        {{ form.file.errors }}
+        {{ form.file.label_tag }}
+        {{ form.file }}
+    </div>
+    <button type="submit">Criar</button>
+</form>
+
+{% endblock content %}

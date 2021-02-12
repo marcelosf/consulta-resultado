@@ -1,6 +1,9 @@
 from django.shortcuts import render
 
+from .forms import CursoForm
+
 
 def new(request):
-    from django.http import HttpResponse
-    return HttpResponse()
+    form = CursoForm()
+    context = {'form': form}
+    return render(request, 'new.html', context=context)
