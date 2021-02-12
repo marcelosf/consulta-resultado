@@ -1,7 +1,10 @@
 from django.test import TestCase
 from django.shortcuts import resolve_url as r
+from unittest import mock
+from django.core.files import File
 
 from ..forms import CursoForm
+from ..models import CursoModel
 
 
 class ViewsTest(TestCase):
@@ -31,3 +34,18 @@ class ViewsTest(TestCase):
         for count, field in fields:
             with self.subTest():
                 self.assertContains(self.resp, field, count=count)
+
+
+class ViewPostTest(TestCase):
+    def setUp(self):
+        file_mock = mock.MagicMock(spec=File)
+        file_mock.name = 'lista.csv'
+        data = {
+            'nome': 'Curso para Professores',
+            'num_vagas': 20,
+            'file': file_mock
+        }
+        self.resp = self.client.post(r('core:new'), data)
+
+    def test_curso_created(self):
+        self.assertTrue(CursoModel.objects.exists())
