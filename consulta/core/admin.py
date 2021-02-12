@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import CursoModel
+from .models import CursoModel, ParticipantesModel
 
 
 class CursoAdmin(admin.ModelAdmin):
@@ -8,3 +8,10 @@ class CursoAdmin(admin.ModelAdmin):
 
 
 admin.site.register(CursoModel, CursoAdmin)
+
+
+class PartipantesAdmin(admin.ModelAdmin):
+    list_display = ('posicao', 'nome', 'status', 'curso')
+
+
+admin.site.register(ParticipantesModel, PartipantesAdmin)
