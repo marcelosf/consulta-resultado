@@ -1,10 +1,13 @@
+import os
 from django.test import TestCase
 from django.shortcuts import resolve_url as r
 from unittest import mock
 from django.core.files import File
+from pathlib import Path
 
+from ..views import get_participantes_dict
 from ..forms import CursoForm
-from ..models import CursoModel
+from ..models import CursoModel, ParticipantesModel
 
 
 class ViewsTest(TestCase):
@@ -38,14 +41,23 @@ class ViewsTest(TestCase):
 
 class ViewPostTest(TestCase):
     def setUp(self):
-        file_mock = mock.MagicMock(spec=File)
-        file_mock.name = 'lista.csv'
-        data = {
-            'nome': 'Curso para Professores',
-            'num_vagas': 20,
-            'file': file_mock
-        }
-        self.resp = self.client.post(r('core:new'), data)
+        base_dir = Path(__file__).parent
+        self.csv_path = os.path.join(base_dir, 'mock/curso.csv')
+        with open(self.csv_path) as file_mock:
+            data = {
+                'nome': 'Curso para Professores',
+                'num_vagas': 20,
+                'file': file_mock
+            }
+            self.resp = self.client.post(r('core:new'), data)
 
     def test_curso_created(self):
         self.assertTrue(CursoModel.objects.exists())
+
+    def test_get_participantes_dict(self):
+        expected = [
+            {'posicao': 1, 'nome': 'Marc Stelvan', 'status': 'Aprovado'},
+            {'posicao': 2, 'nome': 'Marta Schimerman', 'status': 'Invalido'}
+        ]
+        resp = get_participantes_dict(self.csv_path)
+        self.assertListEqual(expected, resp)

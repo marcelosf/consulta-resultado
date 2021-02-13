@@ -1,7 +1,9 @@
+import csv
 from django.shortcuts import render
 
 from .forms import CursoForm
 from .models import CursoModel
+from .csv_extractor import CsvExtractor
 
 
 def new(request):
@@ -24,3 +26,8 @@ def get_curso_data(form):
         'num_vagas': form.cleaned_data['num_vagas']
     }
     return valid_curso_data
+
+
+def get_participantes_dict(file, skip_first_line=True):
+    extractor = CsvExtractor(file, skip_first_line)
+    return extractor.get_participantes()
