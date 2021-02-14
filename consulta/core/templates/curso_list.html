@@ -1,0 +1,36 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+    <h1>Lista de Cursos</h1>
+
+    <div>
+        <ul>
+            {% for curso in cursos %}
+                <li><a href="{{ curso.get_absolute_url }}">{{ curso.nome }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Posição</th>
+                    <th>Nome</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in participantes %}
+                    <tr>
+                        <td>{{ row.posicao }}</td>
+                        <td>{{ row.nome }}</td>
+                        <td>{{ row.status }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock content %}

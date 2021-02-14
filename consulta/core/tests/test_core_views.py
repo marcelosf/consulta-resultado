@@ -64,3 +64,32 @@ class ViewPostTest(TestCase):
 
     def test_participantes_created(self):
         self.assertTrue(Participante.objects.exists())
+
+
+class ListarViewTest(TestCase):
+    def setUp(self):
+        data = dict(nome='Princípios da meteorologia', num_vagas=50)
+        participante = {'posicao': 1, 'nome': 'Alfredo', 'status': 'Aprovado'}
+        curso = Curso.objects.create(**data)
+        curso.participante_set.create(**participante)
+        self.resp = self.client.get(r('core:curso_list'))
+        path = r('core:curso_list') + str(curso.id)
+        self.participante_resp = self.client.get(path)
+
+    def test_status_code(self):
+        self.assertEqual(200, self.resp.status_code)
+
+    def test_render_template(self):
+        self.assertTemplateUsed(self.resp, 'curso_list.html')
+
+    def test_render_main_template(self):
+        self.assertTemplateUsed(self.resp, 'main.html')
+
+    def test_context_has_cursos(self):
+        self.assertIn('cursos', self.resp.context)
+
+    def test_curso_rendered(self):
+        self.assertContains(self.resp, 'Princípios da meteorologia')
+
+    def test_participante_rendered(self):
+        self.assertContains(self.participante_resp, 'Alfredo')
