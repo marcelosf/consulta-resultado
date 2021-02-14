@@ -1,13 +1,13 @@
 from django.test import TestCase
 from django.db import models
 
-from ..models import CursoModel
-from ..models import ParticipantesModel
+from ..models import Curso
+from ..models import Participante
 
 
-class CursoModelTest(TestCase):
+class CursoTest(TestCase):
     def setUp(self):
-        self.obj = CursoModel()
+        self.obj = Curso()
 
     def test_is_instance_of_models(self):
         self.assertIsInstance(self.obj, models.Model)
@@ -20,16 +20,16 @@ class CursoModelTest(TestCase):
 
     def test_data_exists(self):
         data = dict(nome='Princípios meteorologia', num_vagas=50)
-        CursoModel.objects.create(**data)
-        self.assertTrue(CursoModel.objects.exists())
+        Curso.objects.create(**data)
+        self.assertTrue(Curso.objects.exists())
 
 
-class ParticipantesModelTest(TestCase):
+class ParticipanteTest(TestCase):
     def setUp(self):
-        self.obj = ParticipantesModel()
+        self.obj = Participante()
 
     def test_is_instance_of_models(self):
-        self.assertIsInstance(self.obj, ParticipantesModel)
+        self.assertIsInstance(self.obj, Participante)
 
     def test_has_attributes(self):
         attributes = ('posicao', 'nome', 'status')
@@ -39,8 +39,8 @@ class ParticipantesModelTest(TestCase):
 
     def test_data_exists(self):
         curso_data = dict(nome='Princípios da Meteorologia', num_vagas=50)
-        curso = CursoModel.objects.create(**curso_data)
+        curso = Curso.objects.create(**curso_data)
         participante_data = dict(
             nome='Abreu', posicao=2, status='Aceito', curso=curso)
-        ParticipantesModel.objects.create(**participante_data)
-        self.assertTrue(ParticipantesModel.objects.exists())
+        Participante.objects.create(**participante_data)
+        self.assertTrue(Participante.objects.exists())

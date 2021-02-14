@@ -12,13 +12,16 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='ParticipantesModel',
+            name='Participante',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('nome', models.CharField(max_length=128, verbose_name='Nome')),
                 ('posicao', models.IntegerField(verbose_name='Posicao')),
-                ('status', models.CharField(max_length=30, null=True, verbose_name='Status')),
-                ('curso', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='core.cursomodel')),
+                ('status', models.CharField(
+                    max_length=30, null=True, verbose_name='Status')),
+                ('curso', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE, to='core.Curso')),
             ],
         ),
     ]

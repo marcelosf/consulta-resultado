@@ -1,8 +1,10 @@
+import os
 import csv
 from django.shortcuts import render
+from django.core.files.storage import FileSystemStorage
 
 from .forms import CursoForm
-from .models import CursoModel
+from .models import Curso, Participante
 from .csv_extractor import CsvExtractor
 
 

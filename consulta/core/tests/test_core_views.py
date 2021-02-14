@@ -7,7 +7,7 @@ from pathlib import Path
 
 from ..views import get_participantes_dict
 from ..forms import CursoForm
-from ..models import CursoModel, ParticipantesModel
+from ..models import Curso, Participante
 
 
 class ViewsTest(TestCase):
@@ -52,7 +52,7 @@ class ViewPostTest(TestCase):
             self.resp = self.client.post(r('core:new'), data)
 
     def test_curso_created(self):
-        self.assertTrue(CursoModel.objects.exists())
+        self.assertTrue(Curso.objects.exists())
 
     def test_get_participantes_dict(self):
         expected = [
@@ -61,3 +61,6 @@ class ViewPostTest(TestCase):
         ]
         resp = get_participantes_dict(self.csv_path)
         self.assertListEqual(expected, resp)
+
+    def test_participantes_created(self):
+        self.assertTrue(Participante.objects.exists())
