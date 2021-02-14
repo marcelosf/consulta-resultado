@@ -19,7 +19,23 @@ def new(request):
 def create(request):
     form = CursoForm(request.POST, request.FILES)
     if form.is_valid():
-        CursoModel.objects.create(**get_curso_data(form))
+        curso = Curso.objects.create(**get_curso_data(form))
+        file_url = storage_handler(form.cleaned_data['file'])
+        participantes_attr = get_participantes_dict(file_url)
+        participantes = get_participantes_objects(participantes_attr, curso.id)
+        curso.participante_set.bulk_create(participantes)
+        remove_files(file_url)
+
+
+def storage_handler(file):
+    filesystem = FileSystemStorage()
+    filename = filesystem.save(file.name, file)
+    uploaded_file_url = filesystem.path(filename)
+    return uploaded_file_url
+
+
+def remove_files(path):
+    os.remove(path)
 
 
 def get_curso_data(form):
@@ -28,6 +44,14 @@ def get_curso_data(form):
         'num_vagas': form.cleaned_data['num_vagas']
     }
     return valid_curso_data
+
+
+def get_participantes_objects(participantes, curso_id):
+    participantes_lsit = list()
+    for attributes in participantes:
+        attributes['curso_id'] = curso_id
+        participantes_lsit.append(Participante(**attributes))
+    return participantes_lsit
 
 
 def get_participantes_dict(file, skip_first_line=True):
