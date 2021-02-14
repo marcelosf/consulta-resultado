@@ -6,7 +6,8 @@
 <h1>Adicionar Curso</h1>
 
 {{ form.non_field_errors }}
-<form action="#" novalidate>
+<form action="." novalidate method="post" enctype="multipart/form-data">
+    {% csrf_token %}
     <div class="form-warapper">
         {{ form.nome.errors }}
         {{ form.nome.label_tag }}
