@@ -16,6 +16,14 @@ def new(request):
     return render(request, 'new.html', context=context)
 
 
+def curso_list(request, curso_id=None):
+    cursos = Curso.objects.all()
+    context = {'cursos': cursos, 'participantes': []}
+    if curso_id:
+        participantes = Participante.objects.filter(curso=curso_id)
+        context['participantes'] = participantes
+    return render(request, 'curso_list.html', context=context)
+
 def create(request):
     form = CursoForm(request.POST, request.FILES)
     if form.is_valid():
