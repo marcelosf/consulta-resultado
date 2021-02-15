@@ -22,6 +22,7 @@ def curso_list(request, curso_id=None):
     if curso_id:
         participantes = Participante.objects.filter(curso=curso_id)
         context['participantes'] = participantes
+        context['curso_nome'] = participantes.first().curso.nome
     return render(request, 'curso_list.html', context=context)
 
 def create(request):

@@ -1,4 +1,5 @@
 {% extends 'main.html' %}
+{% load widget_tweaks %}
 
 
 {% block content %}
@@ -8,22 +9,24 @@
 {{ form.non_field_errors }}
 <form action="." novalidate method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <div class="form-warapper">
+    <div class="uk-margin">
         {{ form.nome.errors }}
         {{ form.nome.label_tag }}
-        {{ form.nome }}
+        {{ form.nome|add_class:'uk-input'}}
     </div>
-    <div class="form-wrapper">
+    <div class="uk-margin">
         {{ form.num_vagas.errors }}
         {{ form.num_vagas.label_tag }}
-        {{ form.num_vagas }}
+        {{ form.num_vagas|add_class:'uk-input' }}
     </div>
-    <div class="form-wrapper">
+    <div class="uk-margin">
         {{ form.file.errors }}
         {{ form.file.label_tag }}
         {{ form.file }}
     </div>
-    <button type="submit">Criar</button>
+    <div class="uk-margin">
+        <button type="submit" class="uk-button uk-button-primary">Enviar</button>
+    </div>
 </form>
 
 {% endblock content %}
