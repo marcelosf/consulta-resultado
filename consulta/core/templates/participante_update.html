@@ -1,0 +1,47 @@
+{% extends 'main.html' %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+    <h1>Editar Participante</h1>
+
+    {% if messages %}
+    {% for message in messages %}
+        <div {% if message.tags %} class="{{ message.tags }} {% endif %}" uk-alert>
+            <a uk-close class="uk-alert-close"></a>
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% endif %}
+
+    {{ form.non_field_errors }}
+    <form action="./update" novalidate method="post">
+        {% csrf_token %}
+
+        <div class="uk-margin">
+            {{ form.nome.errors }}
+            {{ form.nome.label_tag }}
+            {{ form.nome|add_class:'uk-input' }}
+        </div>
+        <div class="uk-margin">
+            {{ form.posicao.errors }}
+            {{ form.posicao.label_tag }}
+            {{ form.posicao|add_class:'uk-input' }}
+        </div>
+        <div class="uk-margin">
+            {{ form.status.errors }}
+            {{ form.status.label_tag }}
+            {{ form.status|add_class:'uk-input' }}
+        </div>
+        <div class="uk-margin">
+            <button type="submit" class="uk-button uk-button-primary">Enviar</button>
+            <a 
+                href="{{ participante.curso.get_absolute_url }}" 
+                class="uk-button uk-button-default"
+            >
+                Cancelar
+            </a>
+        </div>
+    </form>
+
+{% endblock content %}
