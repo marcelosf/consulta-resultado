@@ -15,3 +15,7 @@ class Participante(models.Model):
     posicao = models.IntegerField(_("Posicao"))
     status = models.CharField(_("Status"), max_length=30, null=True)
     curso = models.ForeignKey('Curso', on_delete=models.CASCADE)
+
+    def get_absolute_url(self):
+        return r('core:participante_update', self.pk)
+    

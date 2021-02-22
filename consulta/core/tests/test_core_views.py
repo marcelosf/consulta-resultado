@@ -72,9 +72,8 @@ class ListarViewTest(TestCase):
         participante = {'posicao': 1, 'nome': 'Alfredo', 'status': 'Aprovado'}
         curso = Curso.objects.create(**data)
         curso.participante_set.create(**participante)
-        self.resp = self.client.get(r('core:curso_list'))
         path = r('core:curso_list') + str(curso.id)
-        self.participante_resp = self.client.get(path)
+        self.resp = self.client.get(path)
 
     def test_status_code(self):
         self.assertEqual(200, self.resp.status_code)
@@ -89,7 +88,61 @@ class ListarViewTest(TestCase):
         self.assertIn('cursos', self.resp.context)
 
     def test_curso_rendered(self):
-        self.assertContains(self.resp, 'Princípios da meteorologia')
+        self.assertContains(self.resp, 'PRINCÍPIOS DA METEOROLOGIA')
 
     def test_participante_rendered(self):
-        self.assertContains(self.participante_resp, 'Alfredo')
+        self.assertContains(self.resp, 'Alfredo')
+
+
+class EditViewGetTest(TestCase):
+    def setUp(self):
+        data = dict(nome='Princípios da meteorologia', num_vagas=50)
+        participante = {'posicao': 1, 'nome': 'Alfredo', 'status': 'Aprovado'}
+        curso = Curso.objects.create(**data)
+        participante = curso.participante_set.create(**participante)
+        path = '/participante/' + str(participante.pk) + '/update'
+        self.resp = self.client.get(path)
+
+    def test_status_code(self):
+        self.assertTrue(200, self.resp.status_code)
+
+    def test_template_rendered(self):
+        self.assertTemplateUsed(self.resp, 'participante_update.html')
+
+    def test_form_is_in_context(self):
+        self.assertIn('form', self.resp.context)
+
+    def test_form_is_rendered(self):
+        self.assertContains(self.resp, '<input', 4)
+
+
+class EditViewTest(TestCase):
+    def setUp(self):
+        data = dict(nome='Princípios da meteorologia', num_vagas=50)
+        participante = {'posicao': 1, 'nome': 'Alfredo', 'status': 'Aprovado'}
+        curso = Curso.objects.create(**data)
+        self.participante = curso.participante_set.create(**participante)
+
+    def test_update_participante_status_code(self):
+        resp = self.make_request()
+        self.assertTrue(200, resp.status_code)
+
+    def test_form_is_valid(self):
+        resp = self.make_request()
+        form = resp.context['form']
+        self.assertTrue(form.is_valid())
+
+    def test_update_participante_update_data(self):
+        self.make_request()
+        participante = Participante.objects.get(pk=self.participante.pk)
+        self.assertEqual(participante.nome, 'Amália')
+
+    def test_scrf(self):
+        resp = self.make_request()
+        self.assertContains(resp, 'csrfmiddlewaretoken')
+    
+    def make_request(self):
+        data = dict(posicao=7, nome='Amália', status='Inválido')
+        path = '/participante/' + str(self.participante.pk) + '/update'
+        return self.client.post(path, data)
+

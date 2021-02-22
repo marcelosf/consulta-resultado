@@ -1,9 +1,11 @@
 import os
 import csv
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.files.storage import FileSystemStorage
+from django.forms import model_to_dict
+from django.contrib import messages
 
-from .forms import CursoForm
+from .forms import CursoForm, ParticipanteForm
 from .models import Curso, Participante
 from .csv_extractor import CsvExtractor
 
@@ -25,6 +27,17 @@ def curso_list(request, curso_id=None):
         context['curso_nome'] = participantes.first().curso.nome
     return render(request, 'curso_list.html', context=context)
 
+
+def participante_update(request, pk):
+    if request.method == 'POST':
+        return update(request, pk)
+    participante = Participante.objects.get(pk=pk)
+    participante_dict = model_to_dict(participante)
+    form = ParticipanteForm(participante_dict)
+    context = {'form': form, 'participante': participante}
+    return render(request, 'participante_update.html', context=context)
+
+
 def create(request):
     form = CursoForm(request.POST, request.FILES)
     if form.is_valid():
@@ -34,6 +47,18 @@ def create(request):
         participantes = get_participantes_objects(participantes_attr, curso.id)
         curso.participante_set.bulk_create(participantes)
         remove_files(file_url)
+
+
+def update(request, pk):
+    form = ParticipanteForm(request.POST)
+    participante = Participante.objects.filter(pk=pk)
+    if form.is_valid():
+        participante.update(**form.cleaned_data)
+        messages.success(request, 'Atualização realizada com sucesso', extra_tags='uk-alert-success')
+        return redirect('core:curso_list', participante.first().curso.pk)
+    messages.error(request, 'Erro ao tentar atualizar participante', extra_tags='uk-alert-error')
+    context = {'form': form, 'participante': participante.first()}
+    return render(request, 'participante_update.html', context=context)
 
 
 def storage_handler(file):
