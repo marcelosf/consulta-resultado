@@ -72,9 +72,8 @@ class ListarViewTest(TestCase):
         participante = {'posicao': 1, 'nome': 'Alfredo', 'status': 'Aprovado'}
         curso = Curso.objects.create(**data)
         curso.participante_set.create(**participante)
-        self.resp = self.client.get(r('core:curso_list'))
         path = r('core:curso_list') + str(curso.id)
-        self.participante_resp = self.client.get(path)
+        self.resp = self.client.get(path)
 
     def test_status_code(self):
         self.assertEqual(200, self.resp.status_code)

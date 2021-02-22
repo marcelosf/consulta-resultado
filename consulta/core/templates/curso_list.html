@@ -32,6 +32,14 @@
                                 <td>{{ row.posicao }}</td>
                                 <td>{{ row.nome }}</td>
                                 <td>{{ row.status }}</td>
+                                <td>
+                                    <a 
+                                        href="{{ row.get_absolute_url }}" 
+                                        class="uk-button uk-button-default"
+                                    >
+                                        <span uk-icon="pencil"></span>
+                                    </a>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
