@@ -4,6 +4,15 @@
 
     <h1>Lista de Cursos</h1>
 
+    {% if messages %}
+        {% for message in messages %}
+            <div {% if message.tags %} class="{{ message.tags }} {% endif %}" uk-alert>
+                <a uk-close class="uk-alert-close"></a>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
     <div class="uk-grid">
         <div class="uk-width-1-5@m">
             <div class="uk-card uk-card-body uk-card-default">
@@ -24,6 +33,7 @@
                             <th>Posição</th>
                             <th>Nome</th>
                             <th>Status</th>
+                            <th>Editar</th>
                         </tr>
                     </thead>
                     <tbody>
