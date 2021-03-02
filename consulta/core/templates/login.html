@@ -1,0 +1,42 @@
+{% extends 'main.html' %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+
+{% if form.errors %}
+    <div class="uk-alert-danger" uk-alert>
+        <a class="uk-alert-close" uk-close></a>
+        Login ou password incorretos.
+    </div>
+{% endif %}
+
+<div class="uk-position-center">
+    <div class="uk-card uk-card-default uk-card-body">
+        <div class="uk-card-title">Login</div>
+
+        <form method="post" action="{% url 'login' %}" novalidate>
+            {% csrf_token %}
+
+            <div class="uk-margin">    
+                {{ form.username.label_tag }}
+                {{ form.username|add_class:'uk-input' }}
+            </div>
+
+
+            <div class="uk-margin">    
+                {{ form.password.label_tag }}
+                {{ form.password|add_class:'uk-input' }}
+            </div>
+
+            <div class="uk-margin">
+                <input type="submit" value="login" class="uk-button uk-button-primary">
+            </div>
+
+            <input type="hidden" name="next" value="{{ next }}">
+        </form>
+    </div>
+</div>
+
+
+{% endblock content %}

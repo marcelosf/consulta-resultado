@@ -15,12 +15,35 @@
   </head>
   <body>
 
+  {% url 'core:new' as new_url %}
+  {% url 'core:curso_list' as list_url %}
+
   <nav class="uk-navbar-container uk-navbar-primary" uk-navbar>
       <div class="uk-navbar-left">
           <ul class="uk-navbar-nav">
-              <li class="uk-active"><a href="{% url 'core:new' %}">Adicionar Curso</a></li>
-              <li><a href="{% url 'core:curso_list' %}">Lista de Cursos</a></li>
+            {% if user.is_authenticated %}            
+              <li 
+                class="{% if request.path == new_url  %}uk-active{% endif %}"
+              >
+                <a href="{% url 'core:new' %}">Adicionar Curso</a>
+              </li>
+              <li
+                  class="{% if request.path == list_url  %}uk-active{% endif %}"
+              >
+                <a href="{% url 'core:curso_list' %}">Lista de Cursos</a>
+              </li>
+            {% endif %}
           </ul>
+      </div>
+      <div class="uk-navbar-right">
+        {% if user.is_authenticated %}
+          <div class="uk-navbar-item">
+                Olá {{ user.username|capfirst }}
+          </div>
+          <div class="uk-navbar-item">
+                <a class="uk-button uk-button-default" href="{% url 'logout' %}">Logout</a>
+          </div>
+        {% endif %}
       </div>
   </nav>
     <div class="uk-container uk-container-expand">

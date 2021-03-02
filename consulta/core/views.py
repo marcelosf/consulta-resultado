@@ -4,12 +4,14 @@ from django.shortcuts import render, redirect
 from django.core.files.storage import FileSystemStorage
 from django.forms import model_to_dict
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 from .forms import CursoForm, ParticipanteForm
 from .models import Curso, Participante
 from .csv_extractor import CsvExtractor
 
 
+@login_required
 def new(request):
     if request.method == 'POST':
         create(request)
@@ -18,6 +20,7 @@ def new(request):
     return render(request, 'new.html', context=context)
 
 
+@login_required
 def curso_list(request, curso_id=None):
     cursos = Curso.objects.all()
     context = {'cursos': cursos, 'participantes': []}
@@ -28,6 +31,7 @@ def curso_list(request, curso_id=None):
     return render(request, 'curso_list.html', context=context)
 
 
+@login_required
 def participante_update(request, pk):
     if request.method == 'POST':
         return update(request, pk)
@@ -54,9 +58,11 @@ def update(request, pk):
     participante = Participante.objects.filter(pk=pk)
     if form.is_valid():
         participante.update(**form.cleaned_data)
-        messages.success(request, 'Atualização realizada com sucesso', extra_tags='uk-alert-success')
+        messages.success(
+            request, 'Atualização realizada com sucesso', extra_tags='uk-alert-success')
         return redirect('core:curso_list', participante.first().curso.pk)
-    messages.error(request, 'Erro ao tentar atualizar participante', extra_tags='uk-alert-error')
+    messages.error(request, 'Erro ao tentar atualizar participante',
+                   extra_tags='uk-alert-error')
     context = {'form': form, 'participante': participante.first()}
     return render(request, 'participante_update.html', context=context)
 
