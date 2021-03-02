@@ -140,7 +140,7 @@ class EditViewGetTest(TestCase):
         self.assertContains(self.resp, 'csrfmiddlewaretoken')
 
 
-class EditViewGetLogeoutTest(TestCase):
+class EditViewGetLogedoutTest(TestCase):
     def setUp(self):
         data = dict(nome='Princípios da meteorologia', num_vagas=50)
         participante = {'posicao': 1, 'nome': 'Alfredo', 'status': 'Aprovado'}
@@ -168,6 +168,25 @@ class EditViewTest(TestCase):
         self.make_request()
         participante = Participante.objects.get(pk=self.participante.pk)
         self.assertEqual(participante.nome, 'Amália')
+
+    def make_request(self):
+        data = dict(posicao=7, nome='Amália', status='Inválido')
+        path = '/participante/' + str(self.participante.pk) + '/update'
+        user = mock_user.create_user()
+        self.client.force_login(user)
+        return self.client.post(path, data)
+
+
+class EditViewLogedoutTest(TestCase):
+    def setUp(self):
+        data = dict(nome='Princípios da meteorologia', num_vagas=50)
+        participante = {'posicao': 1, 'nome': 'Alfredo', 'status': 'Aprovado'}
+        curso = Curso.objects.create(**data)
+        self.participante = curso.participante_set.create(**participante)
+
+    def test_status_code_is_302(self):
+        resp = self.make_request()
+        self.assertEqual(302, resp.status_code)
 
     def make_request(self):
         data = dict(posicao=7, nome='Amália', status='Inválido')
