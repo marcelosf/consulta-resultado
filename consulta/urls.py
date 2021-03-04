@@ -17,6 +17,9 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
+from graphene_django.views import GraphQLView
+from .schema import schema
+
 login_view = auth_views.LoginView.as_view(template_name='login.html')
 logout_view = auth_views.LogoutView.as_view(next_page='/accounts/login/')
 
@@ -25,4 +28,5 @@ urlpatterns = [
     path('accounts/login/', login_view, name='login'),
     path('accounts/logout/', logout_view, name='logout'),
     path('', include('consulta.core.urls')),
+    path('graphql/', GraphQLView.as_view(graphiql=True, schema=schema)),
 ]
