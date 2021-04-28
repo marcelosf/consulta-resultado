@@ -5,6 +5,7 @@ from django.core.files.storage import FileSystemStorage
 from django.forms import model_to_dict
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from graphene_django.views import GraphQLView
 
 from .forms import CursoForm, ParticipanteForm
 from .models import Curso, Participante
@@ -40,6 +41,10 @@ def participante_update(request, pk):
     form = ParticipanteForm(participante_dict)
     context = {'form': form, 'participante': participante}
     return render(request, 'participante_update.html', context=context)
+
+
+class PrivateGraphQL(GraphQLView):
+    pass
 
 
 def create(request):
