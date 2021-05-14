@@ -119,7 +119,7 @@ class EditViewGetTest(TestCase):
         participante = {'posicao': 1, 'nome': 'Alfredo', 'status': 'Aprovado'}
         curso = Curso.objects.create(**data)
         participante = curso.participante_set.create(**participante)
-        path = '/participante/' + str(participante.pk) + '/update'
+        path = participante.get_absolute_url()
         user = mock_user.create_user()
         self.client.force_login(user)
         self.resp = self.client.get(path)
@@ -146,7 +146,7 @@ class EditViewGetLogedoutTest(TestCase):
         participante = {'posicao': 1, 'nome': 'Alfredo', 'status': 'Aprovado'}
         curso = Curso.objects.create(**data)
         participante = curso.participante_set.create(**participante)
-        path = '/participante/' + str(participante.pk) + '/update'
+        path = participante.get_absolute_url()
         self.resp = self.client.get(path)
 
     def test_status_code_is_302(self):
@@ -171,7 +171,7 @@ class EditViewTest(TestCase):
 
     def make_request(self):
         data = dict(posicao=7, nome='Amália', status='Inválido')
-        path = '/participante/' + str(self.participante.pk) + '/update'
+        path = self.participante.get_absolute_url()
         user = mock_user.create_user()
         self.client.force_login(user)
         return self.client.post(path, data)
@@ -190,7 +190,7 @@ class EditViewLogedoutTest(TestCase):
 
     def make_request(self):
         data = dict(posicao=7, nome='Amália', status='Inválido')
-        path = '/participante/' + str(self.participante.pk) + '/update'
+        path = self.participante.get_absolute_url()
         user = mock_user.create_user()
         self.client.force_login(user)
         return self.client.post(path, data)
