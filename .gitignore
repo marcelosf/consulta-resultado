@@ -3,3 +3,5 @@ __pycache__
 .env
 *.sqlite3
 media
+.env.prod
+deploy
