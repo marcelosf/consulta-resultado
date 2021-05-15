@@ -194,3 +194,11 @@ class EditViewLogedoutTest(TestCase):
         user = mock_user.create_user()
         self.client.force_login(user)
         return self.client.post(path, data)
+
+
+class LoginPageTest(TestCase):
+    def setUp(self):
+        self.resp = self.client.get(r('core:new'), follow=True)
+
+    def test_was_redirect_to_login_page(self):
+        self.assertContains(self.resp, 'Login')

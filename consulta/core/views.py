@@ -1,5 +1,6 @@
 import os
 import csv
+from django.conf import settings
 from django.shortcuts import render, redirect
 from django.core.files.storage import FileSystemStorage
 from django.forms import model_to_dict
@@ -12,7 +13,13 @@ from .models import Curso, Participante
 from .csv_extractor import CsvExtractor
 
 
-@login_required
+def get_login_url():
+    base_url = getattr(settings, 'BASE_URL')
+    return '/' + base_url + 'accounts/login/'
+
+print(get_login_url())
+
+@login_required(login_url=get_login_url())
 def new(request):
     if request.method == 'POST':
         create(request)
@@ -21,7 +28,7 @@ def new(request):
     return render(request, 'new.html', context=context)
 
 
-@login_required
+@login_required(login_url=get_login_url())
 def curso_list(request, curso_id=None):
     cursos = Curso.objects.all()
     context = {'cursos': cursos, 'participantes': []}
@@ -32,7 +39,7 @@ def curso_list(request, curso_id=None):
     return render(request, 'curso_list.html', context=context)
 
 
-@login_required
+@login_required(login_url=get_login_url())
 def participante_update(request, pk):
     if request.method == 'POST':
         return update(request, pk)
