@@ -109,6 +109,9 @@ class ListarViewTest(TestCase):
     def test_has_delete_button(self):
         self.assertContains(self.resp, 'icon="trash"')
 
+    def test_contain_modal(self):
+        self.assertContains(self.resp, 'uk-modal-dialog')
+
 
 class ListarViewLogedoutTest(TestCase):
     def test_status_code_is_302(self):

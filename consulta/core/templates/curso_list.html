@@ -21,7 +21,8 @@
                 {% for curso in cursos %}
                 <li>
                     <a href="{{ curso.get_absolute_url }}">{{ curso.nome|upper }}</a>
-                    <button class="uk-button uk-button-default uk-button-small uk-margin-left">
+                    <button class="uk-button uk-button-default uk-button-small uk-margin-left"
+                        uk-toggle="#confirm-{{ curso.pk }}">
                         <span uk-icon="trash"></span>
                     </button>
                 </li>
@@ -58,5 +59,28 @@
             </table>
         </div>
     </div>
+
+    {% for curso in cursos %}
+    <div id="confirm-{{ curso.pk }}" uk-modal>
+        <div class="uk-modal-dialog">
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <div class="uk-modal-header">
+                <h2 class="uk-modal-title">Remover {{ curso.nome }}?</h2>
+            </div>
+            <div class="uk-modal-body">
+                <p>
+                    Ao remover {{ curso.nome }} todos os nomes cadastrados para este curso
+                    serão removidos também.
+                </p>
+            </div>
+            <div class="uk-modal-footer uk-text-right">
+                <button class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</button>
+                <form action="#" method="post">
+                    <button type="submit" class="uk-button uk-button-danger" type="button">Remover</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 
     {% endblock content %}
