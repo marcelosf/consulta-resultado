@@ -3,7 +3,7 @@ from django.core.files import File
 from django.test import TestCase
 from django import forms
 
-from ..forms import CursoForm, ParticipanteForm
+from ..forms import CursoForm, ParticipanteForm, CursoDeleteForm
 
 
 class FormTest(TestCase):
@@ -34,3 +34,15 @@ class ParticipanteFormTest(TestCase):
         for attr in attributes:
             with self.subTest():
                 self.assertIn(attr, fields)
+
+
+class CursoDeleteFormTest(TestCase):
+    def setUp(self):
+        self.form = CursoDeleteForm
+
+    def test_is_instance_of_forms(self):
+        self.assertIsInstance(self.form(), forms.Form)
+
+    def test_has_attribute_curso(self):
+        fields = self.form().fields.keys()
+        self.assertIn('curso', fields)
