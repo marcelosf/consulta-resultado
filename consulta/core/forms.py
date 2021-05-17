@@ -12,3 +12,7 @@ class ParticipanteForm(forms.Form):
     nome = forms.CharField(label='Nome', max_length=128, required=True)
     posicao = forms.IntegerField(label='Posicao', required=True)
     status = forms.CharField(label='Status', max_length=30, required=True)
+
+
+class CursoDeleteForm(forms.Form):
+    curso = forms.IntegerField()

@@ -2,59 +2,87 @@
 
 {% block content %}
 
-    <h1>Lista de Cursos</h1>
+<h1>Lista de Cursos</h1>
 
-    {% if messages %}
-        {% for message in messages %}
-            <div {% if message.tags %} class="{{ message.tags }} {% endif %}" uk-alert>
-                <a uk-close class="uk-alert-close"></a>
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
+{% if messages %}
+{% for message in messages %}
+<div {% if message.tags %} class="{{ message.tags }} {% endif %}" uk-alert>
+    <a uk-close class="uk-alert-close"></a>
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
 
-    <div class="uk-grid">
-        <div class="uk-width-1-5@m">
-            <div class="uk-card uk-card-body uk-card-default">
-                <div class="uk-card-title">CURSOS</div>
-                <ul class="uk-list uk-list-divider">
-                    {% for curso in cursos %}
-                        <li><a href="{{ curso.get_absolute_url }}">{{ curso.nome|upper }}</a></li>
+<div class="uk-grid">
+    <div class="uk-width-1-5@m">
+        <div class="uk-card uk-card-body uk-card-default">
+            <div class="uk-card-title">CURSOS</div>
+            <ul class="uk-list uk-list-divider">
+                {% for curso in cursos %}
+                <li>
+                    <a href="{{ curso.get_absolute_url }}">{{ curso.nome|upper }}</a>
+                    <button class="uk-button uk-button-default uk-button-small uk-margin-left"
+                        uk-toggle="#confirm-{{ curso.pk }}">
+                        <span uk-icon="trash"></span>
+                    </button>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="uk-width-4-5@m">
+        <div class="uk-card uk-card-body uk-card-default">
+            <div class="uk-card-title">INSCRITOS PARA {{ curso_nome|upper }}</div>
+            <table class="uk-table uk-table-divider uk-table-striped uk-table-hover">
+                <thead>
+                    <tr>
+                        <th>Posição</th>
+                        <th>Nome</th>
+                        <th>Status</th>
+                        <th>Editar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in participantes %}
+                    <tr>
+                        <td>{{ row.posicao }}</td>
+                        <td>{{ row.nome }}</td>
+                        <td>{{ row.status }}</td>
+                        <td>
+                            <a href="{{ row.get_absolute_url }}" class="uk-button uk-button-default">
+                                <span uk-icon="pencil"></span>
+                            </a>
+                        </td>
+                    </tr>
                     {% endfor %}
-                </ul>        
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% for curso in cursos %}
+    <div id="confirm-{{ curso.pk }}" uk-modal>
+        <div class="uk-modal-dialog">
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <div class="uk-modal-header">
+                <h2 class="uk-modal-title">Remover {{ curso.nome }}?</h2>
+            </div>
+            <div class="uk-modal-body">
+                <p>
+                    Ao remover {{ curso.nome }} todos os nomes cadastrados para este curso
+                    serão removidos também.
+                </p>
+            </div>
+            <div class="uk-modal-footer uk-text-right">
+                <form action="{% url 'core:curso_delete' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="curso" id="curso-delete-{{ curso.pk }}" value="{{ curso.pk }}">
+                    <button class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</button>
+                    <button type="submit" class="uk-button uk-button-danger" type="button">Remover</button>
+                </form>
             </div>
         </div>
-        <div class="uk-width-4-5@m">
-            <div class="uk-card uk-card-body uk-card-default">
-                <div class="uk-card-title">INSCRITOS PARA {{ curso_nome|upper }}</div>
-                <table class="uk-table uk-table-divider uk-table-striped uk-table-hover">
-                    <thead>
-                        <tr>
-                            <th>Posição</th>
-                            <th>Nome</th>
-                            <th>Status</th>
-                            <th>Editar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for row in participantes %}
-                            <tr>
-                                <td>{{ row.posicao }}</td>
-                                <td>{{ row.nome }}</td>
-                                <td>{{ row.status }}</td>
-                                <td>
-                                    <a 
-                                        href="{{ row.get_absolute_url }}" 
-                                        class="uk-button uk-button-default"
-                                    >
-                                        <span uk-icon="pencil"></span>
-                                    </a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>       
-        </div>
+    </div>
+    {% endfor %}
 
-{% endblock content %}
+    {% endblock content %}

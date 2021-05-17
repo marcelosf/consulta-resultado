@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from graphene_django.views import GraphQLView
 
-from .forms import CursoForm, ParticipanteForm
+from .forms import CursoForm, ParticipanteForm, CursoDeleteForm
 from .models import Curso, Participante
 from .csv_extractor import CsvExtractor
 
@@ -17,7 +17,6 @@ def get_login_url():
     base_url = getattr(settings, 'BASE_URL')
     return '/' + base_url + 'accounts/login/'
 
-print(get_login_url())
 
 @login_required(login_url=get_login_url())
 def new(request):
@@ -109,3 +108,13 @@ def get_participantes_objects(participantes, curso_id):
 def get_participantes_dict(file, skip_first_line=True):
     extractor = CsvExtractor(file, skip_first_line)
     return extractor.get_participantes()
+
+
+def curso_delete(request):
+    if request.method == 'POST':
+        form = CursoDeleteForm(request.POST)
+        if form.is_valid():
+            Curso.objects.filter(pk=form.cleaned_data['curso']).delete()
+            messages.success(request, 'O curso foi removido.',
+                             extra_tags='uk-alert-success')
+    return redirect('core:curso_list')
