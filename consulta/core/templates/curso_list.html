@@ -74,8 +74,10 @@
                 </p>
             </div>
             <div class="uk-modal-footer uk-text-right">
-                <button class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</button>
-                <form action="#" method="post">
+                <form action="{% url 'core:curso_delete' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="curso" id="curso-delete-{{ curso.pk }}" value="{{ curso.pk }}">
+                    <button class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</button>
                     <button type="submit" class="uk-button uk-button-danger" type="button">Remover</button>
                 </form>
             </div>
