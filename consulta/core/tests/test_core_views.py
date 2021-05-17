@@ -106,6 +106,9 @@ class ListarViewTest(TestCase):
     def test_participante_rendered(self):
         self.assertContains(self.resp, 'Alfredo')
 
+    def test_has_delete_button(self):
+        self.assertContains(self.resp, 'icon="trash"')
+
 
 class ListarViewLogedoutTest(TestCase):
     def test_status_code_is_302(self):
