@@ -208,3 +208,21 @@ class LoginPageTest(TestCase):
 
     def test_was_redirect_to_login_page(self):
         self.assertContains(self.resp, 'Login')
+
+
+class DeleteCursoViewTest(TestCase):
+    def setUp(self):
+        data = dict(nome='Princípios da meteorologia', num_vagas=50)
+        participante = {'posicao': 1, 'nome': 'Alfredo', 'status': 'Aprovado'}
+        curso = Curso.objects.create(**data)
+        self.participante = curso.participante_set.create(**participante)
+
+        self.resp = self.client.post(
+            r('core:curso_delete'), {'curso': curso.pk}, follow=True)
+
+    def test_status_code(self):
+        self.assertEqual(200, self.resp.status_code)
+
+    def test_curso_was_deleted(self):
+        self.assertFalse(Curso.objects.exists())
+
