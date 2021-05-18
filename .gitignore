@@ -6,3 +6,4 @@ media
 .env.prod
 deploy
 staticfiles
+media

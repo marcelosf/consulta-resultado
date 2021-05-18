@@ -1,5 +1,6 @@
 import io
 import csv
+import chardet
 
 
 class CsvExtractor:
@@ -9,11 +10,15 @@ class CsvExtractor:
         self.participantes = list()
 
     def get_participantes(self):
-        self.read_file()
+        try:
+            self.read_file(encoding='utf-8')
+        except:
+            self.read_file(encoding='latin1')
+        
         return self.participantes
-
-    def read_file(self):
-        with open(self.file, newline='') as csvfile:
+    
+    def read_file(self, encoding):
+        with open(self.file, newline='', encoding=encoding) as csvfile:
             spamreader = csv.reader(csvfile)
             spamreader = self.skip_line(spamreader)
             self.append_participantes(spamreader)
