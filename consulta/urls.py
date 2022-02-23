@@ -23,6 +23,7 @@ from graphene_django.views import GraphQLView
 from consulta.core.views import PrivateGraphQL
 
 base_url = getattr(settings, 'BASE_URL')
+debug = getattr(settings, 'DEBUG')
 
 next_page = base_url + '/accounts/login/'
 
@@ -34,5 +35,5 @@ urlpatterns = [
     path(base_url + 'accounts/login/', login_view, name='login'),
     path(base_url + 'accounts/logout/', logout_view, name='logout'),
     path(base_url, include('consulta.core.urls')),
-    path('api/graphql/', PrivateGraphQL.as_view(graphiql=True)),
+    path('api/graphql/', PrivateGraphQL.as_view(graphiql=debug)),
 ]
